@@ -1,0 +1,6 @@
+div
+  strong = link_to '▲', { controller: entity.class.table_name, action: :vote, id: entity.id, increase: true }, remote: true
+div id= entity.cid
+  = entity.post.votes
+div
+  strong = link_to '▽', { controller: entity.class.table_name, action: :vote, id: entity.id, decrease: true }, remote: true

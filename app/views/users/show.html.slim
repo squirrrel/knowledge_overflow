@@ -1,0 +1,19 @@
+p#notice= notice
+p
+  strong Avatar:
+  = @user.avatar
+p
+  strong Birthday:
+  = @user.birthday
+p
+  strong Country:
+  = @user.country
+p
+  strong City:
+  = @user.city
+p
+  strong Address:
+  = @user.address
+= link_to 'Edit', edit_user_path(@user)
+| \
+= link_to 'Back', users_path

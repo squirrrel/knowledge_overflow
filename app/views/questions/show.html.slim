@@ -1,0 +1,22 @@
+p#notice= notice
+div
+  table
+    tbody
+      tr
+        td colspan='2'
+          strong= @question.header
+      tr
+        td= render partial: 'shared/votes', locals: { entity: @question }
+        td= @question.post.body
+      tr
+        td= "#{@question.views} Views"
+        td
+          p= @question.user.avatar
+          p= @question.user.email
+
+  = link_to 'Edit', edit_question_path(@question)
+  | \
+  = link_to 'Back', questions_path
+hr
+div
+  = render partial: 'answers/index', locals: { answers: @question.answers }
