@@ -1,23 +1,27 @@
 p#notice= notice
-h1 Questions
-table
-  tbody
-    - @questions.each do |question|
-      tr
-        td rowspan='2'
-          = "#{question.post.votes} Votes"
-        td rowspan='2'
-          = "#{question.answers.count} Answers"
-        td rowspan='2'
-          = "#{question.views} Views"
-        td colspan='2'
-          h4= link_to question.header, question
-      tr
-        td= question.user.avatar
-        td= question.user.email
-        / td= link_to 'Show', question
-        / td= link_to 'Edit', edit_question_path(question)
-        / td= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' }  
+div style='float:left;width:60%'
+  h1 Questions
+  table
+    tbody
+      - @questions.each do |question|
+        tr
+          td rowspan='2'
+            = "#{question.votes_number} Votes"
+          td rowspan='2'
+            = "#{question.answers.count} Answers"
+          td rowspan='2'
+            = "#{question.views} Views"
+          td colspan='2'
+            h4= link_to question.header, question
+        tr
+          td= question.user.avatar
+          td= question.user.email
+          / td= link_to 'Show', question
+          / td= link_to 'Edit', edit_question_path(question)
+          / td= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' }  
+  br/
+  = paginate @questions
+div style='float:right;width:40%'
+= link_to 'New Question', new_question_path
 br/
-= paginate @questions
-/ = link_to 'New Question', new_question_path
+= link_to 'Users', users_path

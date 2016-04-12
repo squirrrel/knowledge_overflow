@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
   # GET /questions/new
   def new
     @question = Question.new
+    @question.build_post
   end
 
   # GET /questions/1/edit
@@ -25,7 +26,8 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.json
   def create
-    @question = Question.new(question_params)
+    @question = Question.new question_params.merge user_id: 1
+    @question.build_post embedded_post_params
 
     respond_to do |format|
       if @question.save
@@ -82,6 +84,10 @@ class QuestionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
       params.require(:question).permit(:header, :views)
-      params.permit(:page, :per_page, :increase, :decrease)
+      # params.permit(:page, :per_page, :increase, :decrease)
+    end
+
+    def embedded_post_params
+      params.require(:question).require(:post_attributes).permit(:body)
     end
 end

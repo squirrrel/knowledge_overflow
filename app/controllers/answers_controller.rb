@@ -20,20 +20,20 @@ class AnswersController < ApplicationController
 
   # GET /answers/1/edit
   def edit
+    # respond_to do |format|
+    #   format.js { render 'edit' }
+    # end
   end
 
   # POST /answers
   # POST /answers.json
   def create
-    @answer = Answer.new(answer_params)
+    @answer = Answer.new answer_paramas.merge user_id: 5
+    @answer.build_post post_params
 
-    respond_to do |format|
-      if @answer.save
-        format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
-        format.json { render :show, status: :created, location: @answer }
-      else
-        format.html { render :new }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
+    if @answer.save
+      respond_to do |format|
+        format.js { render 'load_answer' }
       end
     end
   end
@@ -66,7 +66,7 @@ class AnswersController < ApplicationController
     @cid = @answer.cid
     @votes = calculate_votes(@answer)
 
-    if @answer.post.update(votes: @votes)
+    if @answer.post.update votes: @votes
       respond_to do |format|
         format.js { render 'shared/update_votes.js.erb' }
       end
@@ -80,7 +80,11 @@ class AnswersController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def answer_params
-      params.require(:answer).permit(:increase, :decrease)
+    def post_params
+      params.require(:answer).require(:post).permit(:body)
+    end
+
+    def answer_paramas
+      params.require(:answer).permit(:question_id)
     end
 end

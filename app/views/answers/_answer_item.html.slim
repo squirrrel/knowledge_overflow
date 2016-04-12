@@ -1,0 +1,10 @@
+tr
+  td= render partial: 'shared/votes', locals: { entity: answer }
+  td= answer.post.body
+  / td= link_to 'Show', answer
+  td= link_to 'Edit', edit_answer_path(answer), remote: true
+  / td= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' }
+tr
+  td colspan='2'
+    p= answer.user.avatar
+    p= answer.user.email

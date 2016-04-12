@@ -3,7 +3,7 @@ module Votable
 
   included do
     def votes_number
-      self.post.votes
+      post.votes
     end
   end
 end

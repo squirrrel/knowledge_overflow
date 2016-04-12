@@ -3,7 +3,11 @@ module IdFriendable
 
   included do
     def cid
-      "#{self.class.table_name}-#{self.id}"
+      "#{namespace}-#{id}"
     end
+  end
+
+  def namespace
+    self.class.name.downcase!
   end
 end
