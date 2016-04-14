@@ -1,11 +1,18 @@
 class QuestionsController < ApplicationController
-  include Calculate_Votes
-  before_action :set_question, only: [:show, :edit, :update, :destroy, :vote]
+  include SetParameters
+  include CalculateVotes
 
+  before_action :set_tag_cloud, only: [:index, :show, :tagged]
+  before_action :set_questions, only: [:index, :tagged]
   # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.preload(:user, :post).order('created_at DESC').page(params[:page]).per(10)
+  end
+
+  def tagged
+    @questions = @questions.tagged_with(params[:tag]) if params[:tag]
+
+    render :index
   end
 
   # GET /questions/1
@@ -66,9 +73,9 @@ class QuestionsController < ApplicationController
 
   def vote
     @cid = @question.cid
-    @votes = calculate_votes(@question)
+    @total_votes = calculate_votes()
 
-    if @question.post.update(votes: @votes)
+    if @question.post.update(votes: @total_votes)
       respond_to do |format|
         format.js { render 'shared/update_votes.js.erb' }
       end
@@ -77,17 +84,32 @@ class QuestionsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_question
+    def set_entity
       @question = Question.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def set_questions
+      @questions = Question.preload(:user, :post).order('created_at DESC').page(params[:page]).per(10)
+    end
+
+    def set_tag_cloud
+      @tags = Question.tag_counts_on(:tags)
+    end
+
+    def set_vote
+      @vote = VotesCloud.find_or_create_by(user_id: 1, "#{@question.namespace}_id": @question.id)
+    end
+
+    def set_current_votes_number
+      @entity_current_votes = @question.votes_number
+    end
+
     def question_params
-      params.require(:question).permit(:header, :views)
-      # params.permit(:page, :per_page, :increase, :decrease)
+      params.require(:question).permit(:header, :tag_list)
+      # params.permit(:page, :per_page, :increase, :decrease, :tag)
     end
 
     def embedded_post_params
-      params.require(:question).require(:post_attributes).permit(:body)
+      params.require(:question).permit(post_attributes: :body)[:post_attributes]
     end
 end

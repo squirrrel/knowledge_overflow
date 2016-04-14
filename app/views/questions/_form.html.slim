@@ -14,5 +14,8 @@
     br/
     = f.fields_for :post do |post_form|
       = post_form.text_area :body, placeholder: 'Describe your issue here...'
+  .field
+    = f.label :tags
+    = f.text_field :tag_list
   .actions
     = f.submit

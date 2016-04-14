@@ -53,3 +53,5 @@ gem 'slim'
 gem 'devise'
 
 gem 'kaminari'
+
+gem 'acts-as-taggable-on', '~> 3.5'

@@ -1,33 +1,23 @@
-module Calculate_Votes
+module CalculateVotes
   extend ActiveSupport::Concern
 
   included do
   end
 
   private
-  def calculate_votes entity
-    current_votes = entity.votes_number
+  def calculate_votes
+    flag = @vote.try(:flag)
 
-    record = VotesCloud.find_or_create_by(user_id: 1, "#{entity.namespace}_id": entity.id)
-
-    flag = record.try(:flag)
-
-    if params[:increase] && (!flag || flag == 'decreased')
-      increase(record, current_votes)
-    elsif params[:decrease] && (!flag || flag == 'increased')
-      decrease(record, current_votes)
-    else
-      current_votes
-    end
+    params[:increase] ? increase() : (params[:decrease] ? decrease() : @entity_current_votes)
   end
 
-  def increase record, current_votes
-    record.update_attribute(:flag, 'increased')
-    current_votes + 1
+  def increase
+    @vote.update_attribute :flag, 'increased'
+    @entity_current_votes + 1
   end
 
-  def decrease record, current_votes
-    record.update_attribute(:flag, 'decreased')
-    current_votes - 1
+  def decrease
+    @vote.update_attribute :flag, 'decreased'
+    @entity_current_votes - 1
   end
 end
