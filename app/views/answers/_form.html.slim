@@ -1,7 +1,7 @@
 = form_for :answer, url: answers_path, method: :post, remote: true do |f|
   .field
     = f.fields_for :post do |post_form|
-      = post_form.text_area :body, placeholder: 'Ask me here..'
+      = post_form.text_area :body, placeholder: 'Answer me here..'
   .field
     = f.hidden_field :question_id, { value: question_id }
   .actions

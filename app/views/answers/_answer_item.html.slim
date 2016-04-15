@@ -1,9 +1,12 @@
-tr
-  td id=answer.cid
+tr.answer data-id= answer.id
+  td id=answer.cid class='votes-container'
     = render partial: 'shared/votes', locals: { entity: answer }
-  td= answer.post.body
+  td.description
+    div = answer.post.body
   / td= link_to 'Show', answer
-  td= link_to 'Edit', edit_answer_path(answer), remote: true
+  td
+    div.edit.green-button style='display:none;'
+      = 'Edit'
   / td= link_to 'Destroy', answer, method: :delete, data: { confirm: 'Are you sure?' }
 tr
   td colspan='2'

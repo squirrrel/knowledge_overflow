@@ -18,6 +18,13 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.json
   def show
+    # @question.user_id != current_user.id
+    return if @question.user_id == 2
+
+    unless ViewsCloud.find_by(user_id: 3, question_id: @question.id)
+      @question.update(views: @question.views + 1)
+      ViewsCloud.create user_id: 3, question_id: @question.id
+    end
   end
 
   # GET /questions/new
