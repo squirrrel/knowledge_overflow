@@ -9,4 +9,16 @@ html
   body
     p.notice= notice
     p.alert= alert
+    div#topbar.navigation-bar
+      div.section
+        = link_to 'Sign up', new_user_registration_path
+      div.section
+        = link_to 'Sign in', new_user_session_path
+    div.navigation-bar
+      div.section
+        = link_to 'Ask Question', new_question_path
+      div.section
+        = link_to 'Users', users_path
+      div.section
+        = link_to 'Questions', questions_path
     = yield

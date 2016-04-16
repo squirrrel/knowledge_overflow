@@ -5,9 +5,9 @@ module IdFriendable
     def cid
       "#{namespace}-#{id}"
     end
-  end
 
-  def namespace
-    self.class.name.downcase!
+    def namespace
+      self.class.name.downcase!
+    end
   end
 end

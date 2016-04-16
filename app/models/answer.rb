@@ -1,6 +1,6 @@
 class Answer < ActiveRecord::Base
   include IdFriendable
-  include Votable
+  include PostAccessable
 
   belongs_to :user
   belongs_to :question, required: true

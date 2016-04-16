@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
-  include SetParameters
+  include SharedBeforeFilters
   include CalculateVotes
+
   # GET /answers
   # GET /answers.json
   def index
@@ -19,15 +20,12 @@ class AnswersController < ApplicationController
 
   # GET /answers/1/edit
   def edit
-    # respond_to do |format|
-    #   format.js { render 'edit' }
-    # end
   end
 
   # POST /answers
   # POST /answers.json
   def create
-    @answer = Answer.new answer_params.merge user_id: 5
+    @answer = Answer.new answer_params.merge user_id: current_user.id
     @answer.build_post embedded_post_params
 
     if @answer.save
@@ -72,24 +70,23 @@ class AnswersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_entity
-      @answer = Answer.find(params[:id])
-    end
+  def set_entity
+    @answer = Answer.find(params[:id])
+  end
 
-    def set_vote
-      @vote = VotesCloud.find_or_create_by(user_id: 1, "#{@answer.namespace}_id": @answer.id)
-    end
+  def set_vote
+    @vote = VotesCloud.find_or_create_by(user_id: current_user.id, "#{@answer.namespace}_id": @answer.id)
+  end
 
-    def set_current_votes_number
-      @entity_current_votes = @answer.votes_number
-    end
+  def set_current_votes_number
+    @entity_current_votes = @answer.votes
+  end
 
-    def answer_params
-      params.require(:answer).permit(:question_id)
-    end
+  def answer_params
+    params.require(:answer).permit(:question_id)
+  end
 
-    def embedded_post_params
-      params.require(:answer).permit(post: :body)[:post]
-    end
+  def embedded_post_params
+    params.require(:answer).permit(post: :body)[:post]
+  end
 end

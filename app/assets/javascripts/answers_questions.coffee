@@ -63,7 +63,7 @@ $(document).ready(() ->
     )
 
     request.fail((jqXHR, textStatus) ->
-      alert("Request failed: + #{textStatus}")
+      $('p.alert').text(textStatus)
     )
   )
 )

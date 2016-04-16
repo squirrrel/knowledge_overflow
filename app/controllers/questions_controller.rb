@@ -1,29 +1,26 @@
 class QuestionsController < ApplicationController
-  include SetParameters
+  include SharedBeforeFilters
   include CalculateVotes
 
   before_action :set_tag_cloud, only: [:index, :show, :tagged]
-  before_action :set_questions, only: [:index, :tagged]
   # GET /questions
   # GET /questions.json
   def index
-  end
+    @questions = Question.preload(:user, :post).order('created_at DESC').page(params[:page]).per(10)
 
-  def tagged
     @questions = @questions.tagged_with(params[:tag]) if params[:tag]
-
-    render :index
   end
 
   # GET /questions/1
   # GET /questions/1.json
   def show
-    # @question.user_id != current_user.id
-    return if @question.user_id == 2
+    if user_signed_in?
+      return if @question.user_id == current_user.id
 
-    unless ViewsCloud.find_by(user_id: 3, question_id: @question.id)
-      @question.update(views: @question.views + 1)
-      ViewsCloud.create user_id: 3, question_id: @question.id
+      unless ViewsCloud.find_by(user_id: current_user.id, question_id: @question.id)
+        @question.update(views: @question.views + 1)
+        ViewsCloud.create user_id: current_user.id, question_id: @question.id
+      end
     end
   end
 
@@ -40,7 +37,7 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.json
   def create
-    @question = Question.new question_params.merge user_id: 1
+    @question = Question.new question_params.merge user_id: current_user.id
     @question.build_post embedded_post_params
 
     respond_to do |format|
@@ -90,33 +87,28 @@ class QuestionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_entity
-      @question = Question.find(params[:id])
-    end
+  def set_entity
+    @question = Question.find(params[:id])
+  end
 
-    def set_questions
-      @questions = Question.preload(:user, :post).order('created_at DESC').page(params[:page]).per(10)
-    end
+  def set_tag_cloud
+    @tags = Question.tag_counts_on(:tags)
+  end
 
-    def set_tag_cloud
-      @tags = Question.tag_counts_on(:tags)
-    end
+  def set_vote
+    @vote = VotesCloud.find_or_create_by(user_id: current_user.id, "#{@question.namespace}_id": @question.id)
+  end
 
-    def set_vote
-      @vote = VotesCloud.find_or_create_by(user_id: 1, "#{@question.namespace}_id": @question.id)
-    end
+  def set_current_votes_number
+    @entity_current_votes = @question.votes
+  end
 
-    def set_current_votes_number
-      @entity_current_votes = @question.votes_number
-    end
+  def question_params
+    params.require(:question).permit(:header, :tag_list)
+    # params.permit(:page, :per_page, :increase, :decrease, :tag)
+  end
 
-    def question_params
-      params.require(:question).permit(:header, :tag_list)
-      # params.permit(:page, :per_page, :increase, :decrease, :tag)
-    end
-
-    def embedded_post_params
-      params.require(:question).permit(post_attributes: :body)[:post_attributes]
-    end
+  def embedded_post_params
+    params.require(:question).permit(post: :body)[:post]
+  end
 end

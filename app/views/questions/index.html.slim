@@ -6,7 +6,7 @@ div style='float:left;width:60%'
       - @questions.each do |question|
         tr
           td rowspan='2'
-            = "#{question.votes_number} Votes"
+            = "#{question.votes} Votes"
           td rowspan='2'
             = "#{question.answers.count} Answers"
           td rowspan='2'
@@ -22,7 +22,3 @@ div style='float:left;width:60%'
           / td= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' }
   br/
   = paginate @questions
-div style='float:right;width:40%'
-= link_to 'New Question', new_question_path
-br/
-= link_to 'Users', users_path

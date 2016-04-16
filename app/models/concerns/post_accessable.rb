@@ -1,9 +1,13 @@
-module Votable
+module PostAccessable
   extend ActiveSupport::Concern
 
   included do
-    def votes_number
+    def votes
       post.votes
+    end
+
+    def body
+      post.body
     end
   end
 end

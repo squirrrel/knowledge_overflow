@@ -1,4 +1,4 @@
-module SetParameters
+module SharedBeforeFilters
   extend ActiveSupport::Concern
 
   included do
