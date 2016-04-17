@@ -27,11 +27,12 @@ class AnswersController < ApplicationController
   def create
     @answer = Answer.new answer_params.merge user_id: current_user.id
     @answer.build_post embedded_post_params
-
-    if @answer.save
       respond_to do |format|
-        format.js { render 'load_answer' }
-      end
+        if @answer.save
+          format.js { render 'load_answer' }
+        else
+          format.js { render 'empty_form_alert' }
+        end
     end
   end
 

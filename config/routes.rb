@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, skip: [:sessions]
+    as :user do
+      get '/users/sign_in' => 'sessions#new', as: 'new_user_session'
+      post '/users/sign_in' => 'sessions#create', as: 'user_session'
+      delete '/users/sign_out' => 'sessions#destroy', as: 'destroy_user_session'
+    end
+
   resources :users
 
   root 'questions#index'

@@ -7,4 +7,8 @@ class Question < ActiveRecord::Base
   has_one :post, as: :postable, required: true
 
   acts_as_taggable_on :tags
+
+  accepts_nested_attributes_for :post
+
+  validates :header, presence: :true
 end

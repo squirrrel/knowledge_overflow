@@ -109,6 +109,6 @@ class QuestionsController < ApplicationController
   end
 
   def embedded_post_params
-    params.require(:question).permit(post: :body)[:post]
+    params.require(:question).permit(post_attributes: :body)[:post_attributes]
   end
 end

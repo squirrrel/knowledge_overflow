@@ -7,18 +7,18 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   body
-    p.notice= notice
-    p.alert= alert
+    p.notice style='position:fixed;color:MediumSeaGreen;font: bold 12px Tahoma;' = notice
+    p.alert style='position:fixed;color:Tomato;font: bold 12px Tahoma;' = alert
     div#topbar.navigation-bar
-      div.section
+      div.section.profile-button
         = link_to 'Sign up', new_user_registration_path
-      div.section
+      div.section.profile-button
         = link_to 'Sign in', new_user_session_path
     div.navigation-bar
-      div.section
+      div.section.navigation-button
         = link_to 'Ask Question', new_question_path
-      div.section
+      div.section.navigation-button
         = link_to 'Users', users_path
-      div.section
+      div.section.navigation-button
         = link_to 'Questions', questions_path
     = yield
