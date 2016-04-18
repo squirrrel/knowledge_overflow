@@ -143,7 +143,6 @@ test:
 
 production:
   clients:
-    default:
     uri: mongodb://username:password@host1:port1,host2:port2/database
     options:
       connect_timeout: 15
