@@ -58,3 +58,5 @@ gem 'cancan', '~> 1.6', '>= 1.6.10'
 gem 'kaminari'
 
 gem 'acts-as-taggable-on', '~> 3.5'
+
+gem 'rails_12factor', group: :production
