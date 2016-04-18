@@ -144,7 +144,7 @@ test:
 production:
   clients:
     default:
-      uri: mongodb://dbuser:dbpass@host1:port1,host2:port2/dbname
+      uri: mongodb://heroku_pzhqc0t1:njjedob9fjbqrpnedbrqkm9r7d@ds011291.mlab.com:11291/heroku_pzhqc0t1
       options: 
         consistency: :strong
 
