@@ -144,13 +144,6 @@ test:
 production:
   clients:
     default:
-      database: knowledge_overflow_production
-      hosts:
-        - localhost:27017
-      options:
-        read:
-          mode: :primary
-        max_pool_size: 1
     uri: mongodb://username:password@host1:port1,host2:port2/database
     options:
       connect_timeout: 15
