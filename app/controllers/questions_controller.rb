@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   include CalculateVotes
 
   before_action :set_tag_cloud, only: [:index, :show, :tagged]
+  before_action :update_number_of_views, if: :loggedin_and_not_author?, only: [:show]
   # GET /questions
   # GET /questions.json
   def index
@@ -14,14 +15,6 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.json
   def show
-    if user_signed_in?
-      return if @question.user_id == current_user.id
-
-      unless ViewsCloud.find_by(user_id: current_user.id, question_id: @question.id)
-        @question.update(views: @question.views + 1)
-        ViewsCloud.create user_id: current_user.id, question_id: @question.id
-      end
-    end
   end
 
   # GET /questions/new
@@ -103,9 +96,21 @@ class QuestionsController < ApplicationController
     @entity_current_votes = @question.votes
   end
 
+  def loggedin_and_not_author?
+    user_signed_in? && @question.user_id != current_user.id
+  end
+
+  def update_number_of_views
+    views = ViewsCloud.where(user_id: current_user.id, question_id: @question.id)
+
+    unless views.exists?
+      @question.update(views: @question.views + 1)
+      views.create!
+    end
+  end
+
   def question_params
     params.require(:question).permit(:header, :tag_list)
-    # params.permit(:page, :per_page, :increase, :decrease, :tag)
   end
 
   def embedded_post_params

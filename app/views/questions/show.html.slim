@@ -5,7 +5,7 @@ div
         td colspan='2'
           strong= @question.header
       tr
-        td id=@question.cid
+        td id=@question.cid data-user= current_user.try(:id)
           = render partial: 'shared/votes', locals: { entity: @question }
         td= @question.post.body
       tr

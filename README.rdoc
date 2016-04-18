@@ -1,28 +1,15 @@
-== README
+== TODO
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Override default Devise sessions#create action behavior to ajax?-reload top bar to show users profile/log-out buttons.
 
-Things you may want to cover:
+* Likewise, override sessions#destroy to show sign-in/sign-up buttons
 
-* Ruby version
+* CanCan Roles
 
-* System dependencies
+* Restrict the non-api routes to accept html/script only?
 
-* Configuration
+* Handle 401 for Answer create/update-form
 
-* Database creation
+* Complete CSS-styling
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Improve Question form Tags field

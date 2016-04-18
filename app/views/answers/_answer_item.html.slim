@@ -1,5 +1,5 @@
 tr.answer data-id= answer.id
-  td id=answer.cid class='votes-container'
+  td id=answer.cid class='votes-container' data-user= current_user.try(:id)
     = render partial: 'shared/votes', locals: { entity: answer }
   td.description
     div = answer.post.body
